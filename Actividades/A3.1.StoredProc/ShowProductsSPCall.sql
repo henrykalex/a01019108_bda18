@@ -1,0 +1,1 @@
+call show_products("");

@@ -1,0 +1,1 @@
+call count_customers_a("B");
