@@ -1,0 +1,31 @@
+create index idx1 on orderdetails (orderLineNumber);
+create index idx2 on orderdetails (quantityOrdered, orderLineNumber);
+create index idx3 on orderdetails (orderLineNumber, quantityOrdered)
+
+explain format = json
+select * from orderdetails force index (idx3)
+where orderLineNumber = 1 and quantityOrdered > 50;
+
+-- results:
+-- idx1 = rows: 326 	filtered: 33.33	query_cost: 95.20
+-- idx2 = rows: 66	filtered: 5.56	query_cost: 93.41
+-- idx3 = rows: 5		filtered: 100		query_cost: 8.01
+
+
+explain format = json
+select productCode from orderdetails force index (idx3)
+where orderLineNumber = 1 and quantityOrdered > 50;
+
+-- results:
+-- idx1 = rows: 326 	filtered: 33.33	query_cost: 95.20
+-- idx2 = rows: 66	filtered: 5.56	query_cost: 27.62
+-- idx3 = rows: 5		filtered: 100		query_cost: 3.02
+
+explain format = json
+select orderLineNumber, count(*) from orderdetails force index (idx1)
+where orderLineNumber = 1 and quantityOrdered > 50;
+
+-- results:
+-- idx1 = rows: 326 	filtered: 33.33	query_cost: 95.20
+-- idx2 = rows: 66	filtered: 5.56	query_cost: 27.62
+-- idx3 = rows: 5		filtered: 100		query_cost: 3.02
