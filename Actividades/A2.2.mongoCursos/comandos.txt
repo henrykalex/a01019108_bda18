@@ -1,0 +1,20 @@
+Use escuela
+
+db.createCollection("escuela");
+
+db.escuela.insert({curso:{titulo:"curso1",profesorTitular:"Juan Pedro",año:2018},alumnos:{},profesores:{}});
+
+db.escuela.update({ "_id" : ObjectId("5aa98f7027083798b9703b11")},{$set:{"curso.evaluaciones":{teoricas:12,practicas:23}}});
+
+db.escuela.update({ "_id" : ObjectId("5aa98f7027083798b9703b11")},{$set:{"curso.evaluacion":[12,34,56,76,89]}});
+
+db.escuela.update({ "_id" : ObjectId("5aa98f7027083798b9703b11")},{$set:{"curso.evaluacionProfesor":[12,34,56,76,89]}});
+
+db.escuela.update({ "_id" : ObjectId("5aa98f7027083798b9703b11")},{$set:{"curso.comentariosMid":["adsasd","cascas","asdasdas","aada","aseadas"],"curso.comentariosFin":["adsasd","cascas","asdasdas","aada","aseadas"]}});
+
+db.escuela.update({"_id" : ObjectId("5aa98f7027083798b9703b11")},{$set:{"alumnos":[{nombre:"Enrique M",matricula:"12344",direccion:"asjdvbasldjks"},{nombre:"Enrique M",matricula:"12344",direccion:"asjdvbasldjks"},{nombre:"Enrique M",matricula:"12344",direccion:"asjdvbasldjks"},{nombre:"Enrique M",matricula:"12344",direccion:"asjdvbasldjks"},{nombre:"Enrique M",matricula:"12344",direccion:"asjdvbasldjks"}]}});
+
+db.escuela.update({"_id" : ObjectId("5aa98f7027083798b9703b11")},{$set:{"alumnos.$[].cursos":[ {nombre:"curso1",anoInscripcion:2018,calificaciones:[34,34,56,78],califFinal:54},{nombre:"curso2",anoInscripcion:2017,calificaciones:[34,34,56,78],califFinal:54}]}});
+
+db.escuela.update({"_id" : ObjectId("5aa98f7027083798b9703b11")},{$set:{"profesores":{nombre:"Enrique M",nomina:"12344",dirección:"asjdvbasldjks"}}});
+

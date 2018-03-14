@@ -1,0 +1,166 @@
+db.escuela.find({}).pretty();
+{
+	"_id" : ObjectId("5aa98f7027083798b9703b11"),
+	"curso" : {
+		"titulo" : "curso1",
+		"profesorTitular" : "Juan Pedro",
+		"año" : 2018,
+		"evaluaciones" : {
+			"teoricas" : 12,
+			"practicas" : 23
+		}
+	},
+	"alumnos" : [
+		{
+			"nombre" : "Enrique M",
+			"matricula" : "12344",
+			"direccion" : "asjdvbasldjks",
+			"cursos" : [
+				{
+					"nombre" : "curso1",
+					"anoInscripcion" : 2018,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				},
+				{
+					"nombre" : "curso2",
+					"anoInscripcion" : 2017,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				}
+			]
+		},
+		{
+			"nombre" : "Enrique M",
+			"matricula" : "12344",
+			"direccion" : "asjdvbasldjks",
+			"cursos" : [
+				{
+					"nombre" : "curso1",
+					"anoInscripcion" : 2018,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				},
+				{
+					"nombre" : "curso2",
+					"anoInscripcion" : 2017,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				}
+			]
+		},
+		{
+			"nombre" : "Enrique M",
+			"matricula" : "12344",
+			"direccion" : "asjdvbasldjks",
+			"cursos" : [
+				{
+					"nombre" : "curso1",
+					"anoInscripcion" : 2018,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				},
+				{
+					"nombre" : "curso2",
+					"anoInscripcion" : 2017,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				}
+			]
+		},
+		{
+			"nombre" : "Enrique M",
+			"matricula" : "12344",
+			"direccion" : "asjdvbasldjks",
+			"cursos" : [
+				{
+					"nombre" : "curso1",
+					"anoInscripcion" : 2018,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				},
+				{
+					"nombre" : "curso2",
+					"anoInscripcion" : 2017,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				}
+			]
+		},
+		{
+			"nombre" : "Enrique M",
+			"matricula" : "12344",
+			"direccion" : "asjdvbasldjks",
+			"cursos" : [
+				{
+					"nombre" : "curso1",
+					"anoInscripcion" : 2018,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				},
+				{
+					"nombre" : "curso2",
+					"anoInscripcion" : 2017,
+					"calificaciones" : [
+						34,
+						34,
+						56,
+						78
+					],
+					"califFinal" : 54
+				}
+			]
+		}
+	],
+	"profesores" : {
+		"nombre" : "Enrique M",
+		"nomina" : "12344",
+		"dirección" : "asjdvbasldjks"
+	}
+}
+
