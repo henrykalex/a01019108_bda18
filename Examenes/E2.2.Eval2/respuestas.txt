@@ -1,0 +1,84 @@
+¿Cuál es el total de alumnos inscritos?
+
+db.grades.aggregate([{"$group" : {_id:"$student_id", count:{$sum:1}}},{$count:"students"}]);
+
+¿Cuántos cursos se han impartido?
+	
+db.grades.aggregate([{"$group" : {_id:"$class_id", count:{$sum:1}}},{$count:"classes"}]);
+
+Encuentra, para cada alumno, su promedio obtenido en cada una de las clases en las que fue inscrito (promedia exámenes, quizes, tareas y todas las actividades realizadas que contenga un grade)
+
+var map1 = function(){
+	emit(this.student_id, {"class":this.class_id,"scores":this.scores});
+};
+
+var reduce1 = function(key, values){
+  var n = "";
+  for(let currentValue of values){
+    n+= ' clase: '+currentValue.class+' promedio: ';
+    var finalScore = 0;
+    var countS = 0;
+    for(let score of currentValue.scores){
+      finalScore+= score.score;
+      countS++;
+    }
+    finalScore = finalScore/countS;
+    n+= finalScore;
+  }
+  return n;
+};
+
+db.grades.mapReduce(map1, reduce1, {out:"res"});
+
+
+¿Cuál fue la materia que tiene la calificación más baja (muestra el id de la materia, el id del alumno y la calificación)?
+
+db.grades.aggregate([{$unwind : "$scores"},{$group:{
+_id: "$class_id",
+minScore: {$min: "$scores.score"}
+}}]);
+
+
+¿Cuál es la materia en la que se han dejado más tareas?
+{ "_id" : 22, "tareas" : 43 }
+
+db.grades.aggregate([{$unwind : "$scores"},
+{$match:{"scores.type":'homework'}},
+{$group:{
+_id: "$class_id",
+tareas: {$sum: 1}
+}},{"$sort":{'tareas':-1}},{"$limit":1}]);
+
+{ "_id" : 17, "tareas" : 4 }
+
+db.grades.aggregate([{$unwind : "$scores"},
+{$match:{"scores.type":'homework'}},
+ {$group:{
+ _id: {class_id:"$class_id",
+ student_id: "$student_id"},
+ tareas: {$sum: 1}
+}},{$group:{_id:"$_id.class_id",tareas:{$max:"$tareas"}}},{"$sort":{'tareas':-1}},{"$limit":1}]);
+
+¿Qué alumno se inscribió en más cursos?
+
+db.grades.aggregate([{$group:{
+_id: "$student_id",
+clases: {$sum: 1}
+}},{"$sort":{'clases':-1}},{"$limit":1}]);
+
+{ "_id" : 40, "clases" : 11 }
+
+¿Cuál fue el curso que tuvo más reprobados?
+db.grades.aggregate([{$unwind : "$scores"},
+{$group:{
+_id: {class:"$class_id",student:"$student_id"},
+prom: {$avg: "$scores.score"}
+}},
+{$match:{"prom":{"$lt":70}}},
+{$group:{
+_id:"$_id.class",
+count:{$sum: 1}
+}},{"$sort":{'count':-1}},{"$limit":10}
+]);
+{ "_id" : 22, "count" : 14 }
+

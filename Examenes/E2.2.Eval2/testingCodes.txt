@@ -1,0 +1,68 @@
+db.grades.aggregate([{"$group" : {_id:"$student_id", count:{$sum:1}}},{$count:"students"}]);
+db.grades.aggregate([{"$group" : {_id:"$class_id", count:{$sum:1}}},{$count:"classes"}]);
+
+var map1 = function(){
+	emit(this.student_id, {"class":this.class_id,"scores":this.scores});
+};
+
+var reduce1 = function(key, values){
+  var n = "";
+  for(let currentValue of values){
+    n+= ' clase: '+currentValue.class+' promedio: ';
+    var finalScore = 0;
+    var countS = 0;
+    for(let score of currentValue.scores){
+      finalScore+= score.score;
+      countS++;
+    }
+    finalScore = finalScore/countS;
+    n+= finalScore;
+  }
+  return n;
+};
+
+db.grades.mapReduce(map1, reduce1, {out:"res"});
+
+db.grades.find({}).pretty();
+db.grades.find({student_id:1}).pretty();
+db.grades.find({class_id:1}).pretty();
+
+
+db.grades.aggregate([{$unwind : "$scores"},{$group:{
+_id: "$class_id",
+minScore: {$min: "$scores.score"}
+}}]);
+
+db.grades.aggregate([{$unwind : "$scores"},
+{$match:{"scores.type":'homework'}},
+{$group:{
+_id: "$class_id",
+tareas: {$sum: 1}
+}},{"$sort":{'tareas':-1}},{"$limit":1}]);
+
+db.grades.aggregate([{$unwind : "$scores"},
+{$match:{"scores.type":'homework'}},
+ {$group:{
+ _id: {class_id:"$class_id",
+ student_id: "$student_id"},
+ tareas: {$sum: 1}
+}},{$group:{_id:"$_id.class_id",tareas:{$max:"$tareas"}}},{"$sort":{'tareas':-1}},{"$limit":1}]);
+
+db.grades.aggregate([{$group:{
+_id: "$student_id",
+clases: {$sum: 1}
+}},{"$sort":{'clases':-1}},{"$limit":1}]);
+
+
+db.grades.aggregate([{$unwind : "$scores"},
+{$group:{
+_id: {class:"$class_id",student:"$student_id"},
+prom: {$avg: "$scores.score"}
+}},
+{$match:{"prom":{"$lt":70}}},
+{$group:{
+_id:"$_id.class",
+count:{$sum: 1}
+}},{"$sort":{'count':-1}},{"$limit":10}
+]);
+
