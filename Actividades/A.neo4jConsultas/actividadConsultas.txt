@@ -1,0 +1,82 @@
+Ejercicio Neo4j
+
+Utilizando la base de datos Movies de ejemplo resuelve las siguientes
+preguntas:
+
+1. ¿Cuántos actores hay?
+
+match (v:Person)-[a:ACTED_IN]->(m:Movie) return count(v)
+R.- 172
+
+
+2. ¿cuántos productores hay?
+
+match (v:Person)-[a:PRODUCED]->(m:Movie) return count(v)
+R.- 15
+
+3. ¿cuántos directores hay?
+
+match (v:Person)-[a:DIRECTED]->(m:Movie) return count(v)
+R.- 44
+
+4. ¿cuántas películas hay?
+
+match (m:Movie) return count(m)
+R.- 38
+
+5. ¿Quién ha escrito más películas?
+
+match (v:Person)-[a:WROTE]->(m:Movie)
+WITH v, COUNT(m.title) as count
+WITH MAX(count) as max
+match (v:Person)-[a:WROTE]->(m:Movie)
+WITH v, COUNT(m.title) as count, max
+WHERE count = max
+RETURN v.name as user, count
+
+
+6. El top 5 de películas con el mejor Rating
+
+match (p:Person)-[n:REVIEWED]->(m:Movie)
+with n,m.title as m
+ORDER BY n.rating DESC
+	limit 5
+return m,n
+R.- 
+
+╒═════════════════╤══════════════════════════════╕
+│m                │n                             │
+╞═════════════════╪══════════════════════════════╡
+│The Replacements │{summary: The coolest football│
+│                 │ movie ever, rating: 100}     │
+├─────────────────┼──────────────────────────────┤
+│Cloud Atlas      │{summary: An amazing journey, │
+│                 │rating: 95}                   │
+├─────────────────┼──────────────────────────────┤
+│Jerry Maguire    │{summary: You had me at Jerry,│
+│                 │ rating: 92}                  │
+├─────────────────┼──────────────────────────────┤
+│Unforgiven       │{summary: Dark, but compelling│
+│                 │, rating: 85}                 │
+├─────────────────┼──────────────────────────────┤
+│The Da Vinci Code│{summary: A solid romp, rating│
+│                 │: 68}                         │
+└─────────────────┴──────────────────────────────┘
+
+
+7. ¿Qué personas debería conocer Al Pacino para que le presentaran a
+Audrey Tautou?
+
+match p = shortestpath( (pacino:Person{name:"Al Pacino"})-[*]-(meg:Person{name:"Audrey Tautou"}) ) return p
+r.- Keanu Reeves > James Thompson > Audrey Tautou
+
+8. ¿Qué actores que han producido y actuado en la misma película?
+
+match (p:Person)-[a:ACTED_IN]->(m:Movie),
+ (p)-[:DIRECTED]->(m)
+return p,m
+R.- 	Tom Hanks
+	Clint Eastwood
+Danny DeVito
+
+
